@@ -1,0 +1,141 @@
+{
+  "model_type": "RandomForestClassifier",
+  "n_estimators": 200,
+  "accuracy": 0.7706,
+  "classes_map": {
+    "0": "Abandono",
+    "1": "Matriculado",
+    "2": "Concluinte"
+  },
+  "target_encoding": {
+    "Dropout": 0,
+    "Enrolled": 1,
+    "Graduate": 2
+  },
+  "feature_order": [
+    "Marital_Status",
+    "Application_mode",
+    "Application_order",
+    "Course",
+    "Daytime_evening_attendance",
+    "Previous_qualification",
+    "Previous_qualification_grade",
+    "Nacionality",
+    "Mothers_qualification",
+    "Fathers_qualification",
+    "Mothers_occupation",
+    "Fathers_occupation",
+    "Admission_grade",
+    "Displaced",
+    "Educational_special_needs",
+    "Debtor",
+    "Tuition_fees_up_to_date",
+    "Gender",
+    "Scholarship_holder",
+    "Age_at_enrollment",
+    "International",
+    "Curricular_units_1st_sem_credited",
+    "Curricular_units_1st_sem_enrolled",
+    "Curricular_units_1st_sem_evaluations",
+    "Curricular_units_1st_sem_approved",
+    "Curricular_units_1st_sem_grade",
+    "Curricular_units_1st_sem_without_evaluations",
+    "Curricular_units_2nd_sem_credited",
+    "Curricular_units_2nd_sem_enrolled",
+    "Curricular_units_2nd_sem_evaluations",
+    "Curricular_units_2nd_sem_approved",
+    "Curricular_units_2nd_sem_grade",
+    "Curricular_units_2nd_sem_without_evaluations",
+    "Unemployment_rate",
+    "Inflation_rate",
+    "GDP"
+  ],
+  "feature_defaults": {
+    "Marital_Status": 1,
+    "Application_mode": 17,
+    "Application_order": 1,
+    "Course": 9238,
+    "Daytime_evening_attendance": 1,
+    "Previous_qualification": 1,
+    "Previous_qualification_grade": 133.1,
+    "Nacionality": 1,
+    "Mothers_qualification": 19,
+    "Fathers_qualification": 19,
+    "Mothers_occupation": 5,
+    "Fathers_occupation": 7,
+    "Admission_grade": 126.1,
+    "Displaced": 1,
+    "Educational_special_needs": 0,
+    "Debtor": 0,
+    "Tuition_fees_up_to_date": 1,
+    "Gender": 0,
+    "Scholarship_holder": 0,
+    "Age_at_enrollment": 20,
+    "International": 0,
+    "Curricular_units_1st_sem_credited": 0,
+    "Curricular_units_1st_sem_enrolled": 6,
+    "Curricular_units_1st_sem_evaluations": 8,
+    "Curricular_units_1st_sem_approved": 5,
+    "Curricular_units_1st_sem_grade": 12.29,
+    "Curricular_units_1st_sem_without_evaluations": 0,
+    "Curricular_units_2nd_sem_credited": 0,
+    "Curricular_units_2nd_sem_enrolled": 6,
+    "Curricular_units_2nd_sem_evaluations": 8,
+    "Curricular_units_2nd_sem_approved": 5,
+    "Curricular_units_2nd_sem_grade": 12.2,
+    "Curricular_units_2nd_sem_without_evaluations": 0,
+    "Unemployment_rate": 11.1,
+    "Inflation_rate": 1.4,
+    "GDP": 0.32
+  },
+  "confusion_matrix": [
+    [
+      212,
+      27,
+      45
+    ],
+    [
+      35,
+      66,
+      58
+    ],
+    [
+      10,
+      28,
+      404
+    ]
+  ],
+  "classification_report": {
+    "Abandono": {
+      "precision": 0.8249027237354085,
+      "recall": 0.7464788732394366,
+      "f1-score": 0.7837338262476895,
+      "support": 284.0
+    },
+    "Matriculado": {
+      "precision": 0.5454545454545454,
+      "recall": 0.41509433962264153,
+      "f1-score": 0.4714285714285714,
+      "support": 159.0
+    },
+    "Concluinte": {
+      "precision": 0.796844181459566,
+      "recall": 0.9140271493212669,
+      "f1-score": 0.8514225500526871,
+      "support": 442.0
+    },
+    "accuracy": 0.7706214689265537,
+    "macro avg": {
+      "precision": 0.72240048354984,
+      "recall": 0.6918667873944484,
+      "f1-score": 0.702194982576316,
+      "support": 885.0
+    },
+    "weighted avg": {
+      "precision": 0.7606833609867311,
+      "recall": 0.7706214689265537,
+      "f1-score": 0.7614308662539823,
+      "support": 885.0
+    }
+  }
+}
