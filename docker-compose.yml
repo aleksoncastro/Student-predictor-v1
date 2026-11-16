@@ -1,0 +1,12 @@
+services:
+  mineracao-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: mineracao-student-api:latest
+    container_name: mineracao-student-container
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    environment:
+      - PYTHONUNBUFFERED=1

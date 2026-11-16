@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Predição Acadêmica | Mineração de Dados - UNITINS</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Top Navigation & Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="brand-badge">UNITINS</div>
+        <div>
+          <h1>Predição de Desempenho e Evasão Acadêmica</h1>
+          <p class="subtitle">Mineração de Dados &bull; Curso de Sistemas de Informação &bull; Dataset UCI 697</p>
+        </div>
+      </div>
+      <div class="header-status" id="apiStatusBadge">
+        <span class="status-dot"></span>
+        <span id="apiStatusText">Verificando Backend...</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="main-container">
+
+    <!-- Notice / Disclaimer Bar -->
+    <section class="disclaimer-banner">
+      <div class="disclaimer-icon">⚠️</div>
+      <div class="disclaimer-content">
+        <strong>Aviso Institucional Obrigatório:</strong>
+        <span>Esta previsão é um apoio à análise, e não uma decisão definitiva sobre a trajetória de um estudante.</span>
+      </div>
+    </section>
+
+    <!-- Preset Selection Bar -->
+    <section class="preset-section">
+      <span class="preset-label">Testar com perfil rápido:</span>
+      <div class="preset-buttons">
+        <button type="button" class="btn btn-preset btn-graduate" onclick="loadProfile('concluinte')">
+          🎓 Perfil Concluinte
+        </button>
+        <button type="button" class="btn btn-preset btn-dropout" onclick="loadProfile('abandono')">
+          ⚠️ Risco de Abandono
+        </button>
+        <button type="button" class="btn btn-preset btn-enrolled" onclick="loadProfile('matriculado')">
+          📚 Perfil Matriculado
+        </button>
+        <button type="button" class="btn btn-preset btn-clear" onclick="resetForm()">
+          🔄 Limpar
+        </button>
+      </div>
+    </section>
+
+    <div class="grid-layout">
+      <!-- Input Form Card -->
+      <section class="card form-card">
+        <div class="card-header">
+          <h2>Dados do Estudante</h2>
+          <p>Preencha os atributos para consultar a classificação inferida pelo modelo.</p>
+        </div>
+
+        <form id="predictionForm" novalidate>
+
+          <!-- Group 1: Desempenho Acadêmico -->
+          <div class="form-group-section">
+            <h3 class="section-title">
+              <span class="section-icon">📊</span> 1. Desempenho Acadêmico Semestral
+            </h3>
+            
+            <div class="input-grid">
+              <div class="field">
+                <label for="Curricular_units_1st_sem_approved">
+                  Aprovadas no 1º Semestre
+                  <span class="tooltip" title="Número de unidades curriculares aprovadas no primeiro semestre">ℹ️</span>
+                </label>
+                <input type="number" id="Curricular_units_1st_sem_approved" name="Curricular_units_1st_sem_approved" min="0" max="30" value="5" required>
+                <span class="error-msg" id="err-Curricular_units_1st_sem_approved"></span>
+              </div>
+
+              <div class="field">
+                <label for="Curricular_units_1st_sem_grade">
+                  Média no 1º Semestre (0 a 20)
+                  <span class="tooltip" title="Nota média das unidades curriculares no 1º semestre (escala 0-20)">ℹ️</span>
+                </label>
+                <input type="number" step="0.1" id="Curricular_units_1st_sem_grade" name="Curricular_units_1st_sem_grade" min="0" max="20" value="12.29" required>
+                <span class="error-msg" id="err-Curricular_units_1st_sem_grade"></span>
+              </div>
+
+              <div class="field">
+                <label for="Curricular_units_2nd_sem_approved">
+                  Aprovadas no 2º Semestre
+                  <span class="tooltip" title="Número de unidades curriculares aprovadas no segundo semestre">ℹ️</span>
+                </label>
+                <input type="number" id="Curricular_units_2nd_sem_approved" name="Curricular_units_2nd_sem_approved" min="0" max="30" value="5" required>
+                <span class="error-msg" id="err-Curricular_units_2nd_sem_approved"></span>
+              </div>
+
+              <div class="field">
+                <label for="Curricular_units_2nd_sem_grade">
+                  Média no 2º Semestre (0 a 20)
+                  <span class="tooltip" title="Nota média das unidades curriculares no 2º semestre (escala 0-20)">ℹ️</span>
+                </label>
+                <input type="number" step="0.1" id="Curricular_units_2nd_sem_grade" name="Curricular_units_2nd_sem_grade" min="0" max="20" value="12.20" required>
+                <span class="error-msg" id="err-Curricular_units_2nd_sem_grade"></span>
+              </div>
+
+              <div class="field">
+                <label for="Curricular_units_1st_sem_enrolled">Matriculadas 1º Sem</label>
+                <input type="number" id="Curricular_units_1st_sem_enrolled" name="Curricular_units_1st_sem_enrolled" min="0" max="30" value="6" required>
+              </div>
+
+              <div class="field">
+                <label for="Curricular_units_2nd_sem_enrolled">Matriculadas 2º Sem</label>
+                <input type="number" id="Curricular_units_2nd_sem_enrolled" name="Curricular_units_2nd_sem_enrolled" min="0" max="30" value="6" required>
+              </div>
+
+              <div class="field">
+                <label for="Curricular_units_1st_sem_evaluations">Avaliações Feitas 1º Sem</label>
+                <input type="number" id="Curricular_units_1st_sem_evaluations" name="Curricular_units_1st_sem_evaluations" min="0" max="40" value="8" required>
+              </div>
+
+              <div class="field">
+                <label for="Curricular_units_2nd_sem_evaluations">Avaliações Feitas 2º Sem</label>
+                <input type="number" id="Curricular_units_2nd_sem_evaluations" name="Curricular_units_2nd_sem_evaluations" min="0" max="40" value="8" required>
+              </div>
+            </div>
+          </div>
+
+          <!-- Group 2: Situação Financeira & Auxílios -->
+          <div class="form-group-section">
+            <h3 class="section-title">
+              <span class="section-icon">💳</span> 2. Situação Financeira e Benefícios
+            </h3>
+
+            <div class="input-grid">
+              <div class="field">
+                <label for="Tuition_fees_up_to_date">Mensalidades em Dia?</label>
+                <select id="Tuition_fees_up_to_date" name="Tuition_fees_up_to_date" required>
+                  <option value="1" selected>Sim (Regular)</option>
+                  <option value="0">Não (Atrasada)</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="Scholarship_holder">Bolsista?</label>
+                <select id="Scholarship_holder" name="Scholarship_holder" required>
+                  <option value="0" selected>Não</option>
+                  <option value="1">Sim (Possui Bolsa)</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="Debtor">Possui Pendências/Débitos?</label>
+                <select id="Debtor" name="Debtor" required>
+                  <option value="0" selected>Não (Sem Dívidas)</option>
+                  <option value="1">Sim (Inadimplente)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Group 3: Dados Demográficos -->
+          <div class="form-group-section">
+            <h3 class="section-title">
+              <span class="section-icon">👤</span> 3. Perfil Demográfico
+            </h3>
+
+            <div class="input-grid">
+              <div class="field">
+                <label for="Age_at_enrollment">Idade no Ingresso</label>
+                <input type="number" id="Age_at_enrollment" name="Age_at_enrollment" min="15" max="90" value="20" required>
+                <span class="error-msg" id="err-Age_at_enrollment"></span>
+              </div>
+
+              <div class="field">
+                <label for="Gender">Gênero</label>
+                <select id="Gender" name="Gender" required>
+                  <option value="0" selected>Feminino</option>
+                  <option value="1">Masculino</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="Displaced">Deslocado da Cidade de Origem?</label>
+                <select id="Displaced" name="Displaced" required>
+                  <option value="1" selected>Sim (Mora fora)</option>
+                  <option value="0">Não (Reside na cidade)</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="Educational_special_needs">Necessidades Especiais?</label>
+                <select id="Educational_special_needs" name="Educational_special_needs" required>
+                  <option value="0" selected>Não</option>
+                  <option value="1">Sim</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accordion: Parâmetros Adicionais (Avançado) -->
+          <details class="advanced-details">
+            <summary class="advanced-summary">
+              ⚙️ Parâmetros Adicionais (Vestibular, Família e Indicadores Econômicos)
+            </summary>
+            <div class="advanced-content input-grid">
+              <div class="field">
+                <label for="Admission_grade">Nota no Vestibular/Admissão (0 a 200)</label>
+                <input type="number" step="0.1" id="Admission_grade" name="Admission_grade" min="0" max="200" value="126.1">
+              </div>
+
+              <div class="field">
+                <label for="Previous_qualification_grade">Nota da Qualificação Anterior (0 a 200)</label>
+                <input type="number" step="0.1" id="Previous_qualification_grade" name="Previous_qualification_grade" min="0" max="200" value="133.1">
+              </div>
+
+              <div class="field">
+                <label for="Course">Código do Curso</label>
+                <input type="number" id="Course" name="Course" value="9238">
+              </div>
+
+              <div class="field">
+                <label for="Application_order">Ordem da Opção de Curso</label>
+                <input type="number" id="Application_order" name="Application_order" min="0" max="9" value="1">
+              </div>
+
+              <div class="field">
+                <label for="Unemployment_rate">Taxa de Desemprego Regional (%)</label>
+                <input type="number" step="0.1" id="Unemployment_rate" name="Unemployment_rate" value="11.1">
+              </div>
+
+              <div class="field">
+                <label for="GDP">Variação do PIB (%)</label>
+                <input type="number" step="0.01" id="GDP" name="GDP" value="0.32">
+              </div>
+
+              <div class="field">
+                <label for="Inflation_rate">Taxa de Inflação (%)</label>
+                <input type="number" step="0.1" id="Inflation_rate" name="Inflation_rate" value="1.4">
+              </div>
+
+              <div class="field">
+                <label for="Marital_Status">Estado Civil (1=Solteiro)</label>
+                <input type="number" id="Marital_Status" name="Marital_Status" min="1" max="6" value="1">
+              </div>
+            </div>
+          </details>
+
+          <!-- Submit Button -->
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" id="btnSubmit">
+              <span class="btn-text">🔍 Realizar Predição</span>
+              <span class="btn-spinner" id="btnSpinner" style="display: none;"></span>
+            </button>
+          </div>
+
+        </form>
+      </section>
+
+      <!-- Results Panel -->
+      <section class="card result-card" id="resultSection">
+        <div class="card-header">
+          <h2>Resultado da Análise</h2>
+          <p>Classificação acadêmica estimada pelo modelo de machine learning.</p>
+        </div>
+
+        <!-- Initial Placeholder State -->
+        <div class="placeholder-state" id="placeholderState">
+          <div class="placeholder-icon">🎯</div>
+          <h3>Aguardando preenchimento</h3>
+          <p>Preencha os dados do estudante e clique em <strong>Realizar Predição</strong> ou clique em um dos botões de exemplo acima para ver o resultado instantâneo.</p>
+        </div>
+
+        <!-- Result Content (Hidden by default) -->
+        <div class="result-display" id="resultDisplay" style="display: none;">
+          
+          <div class="prediction-badge-container">
+            <span class="prediction-label">Classe Prevista:</span>
+            <div class="prediction-badge" id="predictionBadge">Concluinte</div>
+          </div>
+
+          <p class="prediction-description" id="predictionDescription"></p>
+
+          <!-- Probabilities Bars -->
+          <div class="probabilities-container">
+            <h4>Distribuição de Probabilidades:</h4>
+
+            <div class="prob-row">
+              <div class="prob-header">
+                <span>🎓 Concluinte</span>
+                <strong id="prob-graduate">0%</strong>
+              </div>
+              <div class="prob-track">
+                <div class="prob-fill fill-graduate" id="bar-graduate" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <div class="prob-row">
+              <div class="prob-header">
+                <span>📚 Matriculado</span>
+                <strong id="prob-enrolled">0%</strong>
+              </div>
+              <div class="prob-track">
+                <div class="prob-fill fill-enrolled" id="bar-enrolled" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <div class="prob-row">
+              <div class="prob-header">
+                <span>⚠️ Abandono</span>
+                <strong id="prob-dropout">0%</strong>
+              </div>
+              <div class="prob-track">
+                <div class="prob-fill fill-dropout" id="bar-dropout" style="width: 0%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Institutional Disclaimer Callout -->
+          <div class="result-disclaimer">
+            <div class="result-disclaimer-icon">⚖️</div>
+            <p id="resultDisclaimerText">
+              Aviso: Esta previsão é um apoio à análise, e não uma decisão definitiva sobre a trajetória de um estudante.
+            </p>
+          </div>
+
+        </div>
+
+      </section>
+    </div>
+
+    <!-- System Info Footer -->
+    <footer class="app-footer">
+      <p>Desenvolvido para a atividade de Mineração de Dados &bull; Backend FastAPI com Docker &bull; UNITINS</p>
+      <div class="footer-links">
+        <a href="/docs" target="_blank" rel="noopener">Documentação Swagger (API)</a>
+        <a href="/health" target="_blank" rel="noopener">Status do Serviço</a>
+        <a href="/info" target="_blank" rel="noopener">Métricas do Modelo</a>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="toast"></div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
